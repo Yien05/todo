@@ -1,40 +1,48 @@
 function Item(props) {
-  const { text = "No Task", isCompleted } = props;
-  if (isCompleted === true) {
+  const {
+    id,
+    text = "No Task",
+    isCompleted,
+    onItemDelete,
+    onItemTick,
+  } = props;
+
+ 
+
     return (
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li className="list-group-item d-flex justify-content-between align-items-center">
         <div>
-          <button class="btn btn-sm btn-success">
-            <i class="bi bi-check-square"></i>
+          <button
+            className={`btn btn-sm ${isCompleted ? "btn-success" : "btn-light"}`}
+            onClick={() => {
+              onItemTick(id)
+
+            }}
+          >
+            <i className={isCompleted ? "bi bi-check-square" : "bi bi-square"}></i>
+            
           </button>
-        <span className="text-decoration-line-through ms-3">{text}</span>
+          <span className={isCompleted?"text-decoration-through ms-3" :"text-decoration-through ms-3"}>{text}</span>
         </div>
 
         <div>
-          <button class="btn btn-sm btn-danger">
-            <i class="bi bi-trash"></i>
+          <button
+            className="btn btn-sm btn-danger"
+            onClick={() => {
+              const confirm = window.confirm(
+                "Are you sure you want to delete this task?"
+              );
+              if (confirm) {
+                onItemDelete(id);
+              }
+            }}
+          >
+            <i className="bi bi-trash"></i>
           </button>
         </div>
       </li>
     );
-  } else {
-    return (
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <button class="btn btn-sm btn-light">
-            <i class="bi bi-square"></i>
-          </button>
-        <span className="ms-3">{text}</span>
-        </div>
+  
 
-        <div>
-          <button class="btn btn-sm btn-danger">
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
-      </li>
-    );
   }
-}
-
 export default Item;
