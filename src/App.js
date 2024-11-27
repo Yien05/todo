@@ -1,12 +1,20 @@
-import { useState } from "react";
 import { nanoid } from "nanoid";
 
 import AddNewTodo from "./components/addnew";
 import TodosList from "./components/list";
 
 function App() {
-  const [list, setList] = useState([]);
+  /*
+    1. [x] load the data from the local storage
+  */
+  const stringItems = localStorage.getItem("items");
+  // convert the string version of posts into array
+  let list = JSON.parse(stringItems);
 
+  // if list is not found in the localstorage, set empty array
+  if (!list) {
+    list = [];
+  }
 
   return (
     <div className="container">
@@ -21,17 +29,23 @@ function App() {
 
           <TodosList
             list={list}
-            onItemDelete={(id) => {
-              const newList = list.filter((s) => s.id !== id);
-              setList(newList);
-            }}
+            onItemDelete={
+            (item_id) => {
+                // 1. remove the selected post from posts based on the post_id
+                let filteredItems = list.filter((item) => item.id !== item_id);
+                // 2. update the data back to the local storage using thelocalStorage.setItem()
+                let convertedItems = JSON.stringify(filteredItems);
+
+                localStorage.setItem("items", convertedItems);
+              }
+            }
             onItemTick={(id) => {
               const newList = list.map((item) =>
                 item.id === id
                   ? { ...item, isCompleted: !item.isCompleted }
                   : item
               );
-              setList(newList);
+
             }}
           />
 
@@ -43,7 +57,7 @@ function App() {
                 text: itemName,
                 isCompleted: false,
               });
-              setList(newList);
+
             }}
           />
         </div>
