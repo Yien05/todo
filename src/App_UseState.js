@@ -1,26 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { nanoid } from "nanoid";
-
 import AddNewForm from "./components/addnew";
 import TodoList from "./components/list";
-
 function App() {
-  const navigate = useNavigate();
   // load the data from the local storage
-  let todos = localStorage.getItem("todolist");
-  todos = JSON.parse(todos);
+  let todolist = localStorage.getItem("todolist");
+  todolist = JSON.parse(todolist);
   // if todolist is null, set it as empty array
-  if (!todos) {
-    todos = [];
+  if (!todolist) {
+    todolist = [];
   }
-
+  // set the data into the state as default state
+  const [todos, setTodos] = useState(todolist);
   const updateLocalStorage = (newTodos) => {
     const convertedTodos = JSON.stringify(newTodos);
     localStorage.setItem("todolist", convertedTodos);
-    // redireact back to /
-    navigate("/");
   };
-
   return (
     <div className="App">
       <div
@@ -52,12 +47,15 @@ function App() {
               //   // only update if item exists
               //   item.isCompleted = newIsCompleted;
               // }
+              setTodos(newTodos);
               // save the newTodos into local storage
               updateLocalStorage(newTodos);
             }}
             onItemDelete={(id) => {
               // filter out the item with the selected id
               const newTodos = todos.filter((t) => t.id !== id);
+              // update the existing state
+              setTodos(newTodos);
               // save the newTodos into local storage
               updateLocalStorage(newTodos);
             }}
@@ -71,6 +69,8 @@ function App() {
                 text: newItem,
                 isCompleted: false,
               });
+              // update the todos state
+              setTodos(newTodos);
               // save the newTodos into local storage
               updateLocalStorage(newTodos);
             }}
@@ -80,5 +80,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

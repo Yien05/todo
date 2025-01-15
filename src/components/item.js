@@ -1,40 +1,43 @@
-function Item(props) {
-  const { id, text = "No Task", isCompleted, onItemDelete, onItemTick } = props;
-
+function TodoItem(props) {
+  const { id, text, isCompleted, onItemUpdate, onItemDelete } = props;
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
       <div>
-        <button
-          className={`btn btn-sm ${isCompleted ? "btn-success" : "btn-light"}`}
-          onClick={() => {
-            onItemTick(id);
-          }}
-        >
-          <i
-            className={isCompleted ? "bi bi-check-square" : "bi bi-square"}
-          ></i>
-        </button>
+        {isCompleted ? (
+          <button
+            className="btn btn-sm btn-success"
+            onClick={() => {
+              // passing in the id and the new status
+              onItemUpdate(id, false);
+            }}
+          >
+            <i className="bi bi-check-square"></i>
+          </button>
+        ) : (
+          <button
+            className="btn btn-sm btn-light"
+            onClick={() => {
+              onItemUpdate(id, true);
+            }}
+          >
+            <i className="bi bi-square"></i>
+          </button>
+        )}
+        {/* <button className={isCompleted ? "btn btn-sm btn-success" : "btn btn-sm btn-light"}>
+            <i className={ isCompleted ? "bi bi-check-square" : "bi bi-square" }></i>
+        </button> */}
+        {/* this is for comment */}
         <span
-          className={
-            isCompleted
-              ? "text-decoration-line-through ms-3"
-              : "text-decoration-through ms-3"
-          }
+          className={isCompleted ? "ms-2 text-decoration-line-through" : "ms-2"}
         >
           {text}
         </span>
       </div>
-
       <div>
         <button
           className="btn btn-sm btn-danger"
           onClick={() => {
-            const confirm = window.confirm(
-              "Are you sure you want to delete this task?"
-            );
-            if (confirm) {
-              onItemDelete(id);
-            }
+            onItemDelete(id);
           }}
         >
           <i className="bi bi-trash"></i>
@@ -43,4 +46,4 @@ function Item(props) {
     </li>
   );
 }
-export default Item;
+export default TodoItem;

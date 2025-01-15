@@ -1,26 +1,24 @@
-import Item from "./item";
+import TodoItem from "./item";
 
-function TodosList(props) {
-  const { list, onItemDelete, onItemTick} = props;
-  
+function TodoList(props) {
+  const { todos, onItemUpdate, onItemDelete } = props;
   return (
-    <div className="card" style={{ margin: "15px" }}>
-      <ul className="list-group">
-        {list.map((item) => {
-          return (
-            <Item
-              key={item.id}
-              {...item}
-              onItemDelete={(id) => {
-                onItemDelete(id);
-              }}
-              onItemTick = {onItemTick}
-            />
-          );
-        })}
-      </ul>
-    </div>
+    <ul className="list-group">
+      {todos.map((item) => {
+        return (
+          <TodoItem
+            key={item.id}
+            // id={item.id}
+            // text={item.text}
+            // isCompleted={item.isCompleted}
+            {...item}
+            onItemUpdate={onItemUpdate}
+            onItemDelete={onItemDelete}
+          />
+        );
+      })}
+    </ul>
   );
 }
 
-export default TodosList;
+export default TodoList;
